@@ -20,44 +20,46 @@ export default function Home() {
         {
           query: `
             query MyQuery {
-  posts {
-    nodes {
-      id
-      title
-      slug
-      date
-      featuredImage {
-        node {
-          altText
-          fileSize(size: LARGE)
-          link
-          mediaItemUrl
-        }
-      }
-      categories {
-        nodes {
-          name
-          slug
-          uri
-        }
-      }
-    }
-  }
-}
+              posts {
+                nodes {
+                  id
+                  title
+                  slug
+                  date
+                  featuredImage {
+                    node {
+                      altText
+                      fileSize(size: LARGE)
+                      link
+                      mediaItemUrl
+                    }
+                  }
+                  categories {
+                    nodes {
+                      name
+                      slug
+                      uri
+                    }
+                  }
+                }
+              }
+            }
           `,
         },
         {
           headers: {
             "Content-Type": "application/json",
           },
+          withCredentials: true, // Include credentials if needed (e.g., cookies)
         }
       );
-
+  
       setData(res.data.data.posts.nodes); // Update state with fetched data
     } catch (error) {
       console.error("Error fetching data:", error); // Handle errors gracefully
     }
   };
+  
   
   return (
     <>
