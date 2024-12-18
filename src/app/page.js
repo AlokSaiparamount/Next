@@ -1,95 +1,131 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+
+'use client';
+import axios from "axios";
+import { useEffect, useState } from "react";
+import Skeleton from '@mui/material/Skeleton';
+import Link from "next/link";
 
 export default function Home() {
-  return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>src/app/page.js</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [data, setData] = useState([]);
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
+  useEffect(() => {
+    fetchApi();
+    
+  }, []);
+  const fetchApi = async () => {
+    let url = 'https://next.spis.co.in/graphql';
+    try {
+      let res = await axios.post(
+        url,
+        {
+          query: `
+            query MyQuery {
+  posts {
+    nodes {
+      id
+      title
+      slug
+      date
+      featuredImage {
+        node {
+          altText
+          fileSize(size: LARGE)
+          link
+          mediaItemUrl
+        }
+      }
+      categories {
+        nodes {
+          name
+          slug
+          uri
+        }
+      }
+    }
+  }
+}
+          `,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      setData(res.data.data.posts.nodes); // Update state with fetched data
+    } catch (error) {
+      console.error("Error fetching data:", error); // Handle errors gracefully
+    }
+  };
+  
+  return (
+    <>
+      {/* Brardcum  */}
+      <div className="portfolio-banner">
+        <div className="port-banner-text">
+          <ul id="breadcrumb">
+            <li><a href="index">Home</a></li>
+            <li><a href="#"><span className=" fa fa-info-circle"> </span> Blog</a></li>
+          </ul>
         </div>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+      </div>
+      {/* Brardcum end */}
+      {/* recent blog  */}
+      <section className="mt-60">
+        <div className="container">
+          <div class="sticky-news d-flex align-items-center card-h">
+            <div class="news-img-box">
+              <img src="https://www.phoneworld.com.pk/wp-content/uploads/2020/01/shutterstock_720876373.jpg" alt="News" />
+            </div>
+            <div class="news-content">
+              <h1 class="section-subtitle">Recent Blog</h1>
+              <h2 class="section-title">OpenAI launches new alignment division to tackle risks of
+                superintelligent AI</h2>
+              <p className="mb-0 pb-0 bm-none">The makers of AI have announced the company will be dedicating 20% of its compute processing
+                power over the next four years</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      {/* recent blog end */}
+      {/* blog loop  */}
+      <section className="">
+        <div className="container">
+          <div className="row">
+            {
+              data.length ? <>
+                {data.map((post) => (
+                  <div className="col-lg-4 mb-4" key={post.id}>
+                    <div class="news-item card-h">
+                      <div class="news-img-box">
+                        <img src={post.featuredImage.node.link} className="blog-img" alt="How to Safeguard Your WordPress Site from Cyber Threats" />
+                      </div>
+                      <div class="news-item-body">
+                        <span class="section-subtitle d-block"><a href="#" rel="category tag">{post.categories.nodes[0].name}</a></span>
+                        <span class="section-title d-block one-line">
+                          <Link href={post.slug}>{post.title}</Link>
+                        </span>
+                        {/* <p>WordPress: Popularity Brings Perks…and Problems With WordPress powering over 40% of the internet, it’s the go-to platform for both creators...</p> */}
+
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </> : Array.from({ length: 10 }).map((_, index) => (
+                <div className="col-lg-4 mb-4" key={index}>
+                  <Skeleton variant="rectangular" width="100%" height={250} />
+                  <Skeleton variant="text" width="80%" />
+                  <Skeleton variant="text" width="60%" />
+                </div>
+              ))
+            }
+
+
+          </div>
+        </div>
+      </section>
+      {/* blog loop end */}
+    </>
   );
 }
