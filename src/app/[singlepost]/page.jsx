@@ -13,7 +13,7 @@ const SinglePost = ({ params }) => {
   }, []);
 
   const fetchSinglePost = async () => {
-    const url = "https://next.spis.co.in/graphql";
+    const url = "http://localhost/wp-api/graphql";
     const postSlug = params.singlepost;
 
     try {

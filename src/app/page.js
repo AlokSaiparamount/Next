@@ -13,7 +13,7 @@ export default function Home() {
     
   }, []);
   const fetchApi = async () => {
-    let url = 'https://next.spis.co.in/graphql';
+    let url = 'http://localhost/wp-api/graphql';
     try {
       let res = await axios.post(
         url,
