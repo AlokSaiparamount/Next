@@ -17,7 +17,7 @@ const SinglePost = ({ params }) => {
   }, []);
 
   const fetchSinglePost = async () => {
-    const url = "http://localhost/wp-api/graphql";
+    const url = "https://next.spis.co.in/graphql";
     const postSlug = params.singlepost;
 
     try {
@@ -77,7 +77,7 @@ const SinglePost = ({ params }) => {
   // fetch SEO 
   const seo = async () => {
     let slug = params.singlepost;
-    let seoUrl = `http://localhost/wp-api/graphql`;
+    let seoUrl = `https://next.spis.co.in/graphql`;
     try {
       const seoRes = await axios.post(seoUrl, {
         query: `
