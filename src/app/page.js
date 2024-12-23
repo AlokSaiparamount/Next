@@ -1,5 +1,5 @@
-
 'use client';
+
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Skeleton from '@mui/material/Skeleton';
@@ -7,13 +7,15 @@ import Link from "next/link";
 
 export default function Home() {
   const [data, setData] = useState([]);
+  const [client, setClient] = useState(false);
 
   useEffect(() => {
+    setClient(true)
     fetchApi();
     
   }, []);
   const fetchApi = async () => {
-    let url = 'https://next.spis.co.in/graphql';
+    let url = 'http://localhost/wp-api/graphql';
     try {
       let res = await axios.post(
         url,
@@ -60,9 +62,13 @@ export default function Home() {
     }
   };
   
+  // if (!client) return null;
   
   return (
     <>
+      <head>
+         <title>Blog Sai Paramount</title>
+      </head>
       {/* Brardcum  */}
       <div className="portfolio-banner">
         <div className="port-banner-text">
