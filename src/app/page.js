@@ -12,10 +12,10 @@ export default function Home() {
   useEffect(() => {
     setClient(true)
     fetchApi();
-    
+
   }, []);
   const fetchApi = async () => {
-    let url = 'https://next.spis.co.in/graphql';
+    let url = 'https://next.spis.co.in/graphql'
     try {
       let res = await axios.post(
         url,
@@ -55,19 +55,19 @@ export default function Home() {
           withCredentials: true, // Include credentials if needed (e.g., cookies)
         }
       );
-  
+
       setData(res.data.data.posts.nodes); // Update state with fetched data
     } catch (error) {
       console.error("Error fetching data:", error); // Handle errors gracefully
     }
   };
-  
+
   // if (!client) return null;
-  
+
   return (
     <>
       <head>
-         <title>Blog Sai Paramount</title>
+        <title>Blog Sai Paramount</title>
       </head>
       {/* Brardcum  */}
       <div className="portfolio-banner">
@@ -98,24 +98,24 @@ export default function Home() {
       </section>
       {/* recent blog end */}
       {/* blog loop  */}
-      <section className="">
+      <section className="paramount-blog">
         <div className="container">
           <div className="row">
             {
               data.length ? <>
                 {data.map((post) => (
-                  <div className="col-lg-4 mb-4" key={post.id}>
+                  <div className="col-lg-4 mb-4" key={post.id} title={post.title}>
                     <div class="news-item card-h">
                       <div class="news-img-box">
-                        <img src={post.featuredImage.node.link} className="blog-img" alt="How to Safeguard Your WordPress Site from Cyber Threats" />
+                        <Link href={post.slug}>
+                          <img src={post.featuredImage.node.link} className="blog-img" alt={post.title} title={post.title} />
+                        </Link>
                       </div>
                       <div class="news-item-body">
                         <span class="section-subtitle d-block"><a href="#" rel="category tag">{post.categories.nodes[0].name}</a></span>
-                        <span class="section-title d-block one-line">
-                          <Link href={post.slug}>{post.title}</Link>
+                        <span class="section-title d-block">
+                          <Link href={post.slug} className="one-line">{post.title}</Link>
                         </span>
-                        {/* <p>WordPress: Popularity Brings Perks…and Problems With WordPress powering over 40% of the internet, it’s the go-to platform for both creators...</p> */}
-
                       </div>
                     </div>
                   </div>
